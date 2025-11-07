@@ -6,8 +6,8 @@ export enum Placement {
 }
 
 export enum Status {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE'
+  ACTIVE = 'active',
+  INACTIVE = 'inactive'
 }
 
 export interface AdSpot {
@@ -50,5 +50,4 @@ export interface ApiError {
 export type AdSpotFilters = {
   placement?: Placement;
   search?: string;
-  includeExpired?: boolean;
 };

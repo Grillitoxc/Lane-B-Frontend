@@ -1,6 +1,7 @@
 'use client';
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSWRConfig } from 'swr';
 import { createAdSpot } from '@/lib/api-client';
 import { createAdSpotSchema } from '@/lib/validations';
 import { useToast } from '@/hooks/useToast';
@@ -16,6 +17,7 @@ import {
 
 export default function AdSpotForm() {
   const router = useRouter();
+  const { mutate } = useSWRConfig();
   const { showToast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -49,6 +51,10 @@ export default function AdSpotForm() {
     try {
       await createAdSpot(result.data);
       showToast('AdSpot creado exitosamente', 'success');
+
+      // Invalidar cache de SWR para que recargue la lista
+      mutate((key) => Array.isArray(key) && key[0] === 'adspots');
+
       router.push('/adspots');
     } catch (error) {
       showToast(

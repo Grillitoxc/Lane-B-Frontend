@@ -11,8 +11,9 @@ export function useAdSpots(filters: AdSpotFilters, initialData?: AdSpot[]) {
     () => fetchAdSpots(filters),
     {
       fallbackData: initialData ? { adSpots: initialData, total: initialData.length } : undefined,
-      revalidateOnFocus: true,
-      dedupingInterval: 5000,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      dedupingInterval: 10000,
       keepPreviousData: true
     }
   );

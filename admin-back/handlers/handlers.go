@@ -60,13 +60,14 @@ func (h *Handler) DeactivateAdSpot(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) ListAdSpots(w http.ResponseWriter, r *http.Request) {
 	placement := r.URL.Query().Get("placement")
 	status := r.URL.Query().Get("status")
+	search := r.URL.Query().Get("search")
 
 	if status != "" && status != "active" {
 		http.Error(w, "only status=active is supported", http.StatusBadRequest)
 		return
 	}
 
-	ads := h.store.ListActive(placement)
+	ads := h.store.ListActive(placement, search)
 
 	response := models.ListAdSpotsResponse{
 		AdSpots: ads,

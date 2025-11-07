@@ -7,8 +7,8 @@ import SearchInput from './SearchInput';
 import AdSpotCard from './AdSpotCard';
 import Spinner from '@/components/ui/Spinner';
 import Link from 'next/link';
-import { Button, Card, CardBody, Switch } from '@heroui/react';
-import { Plus, Filter, Search, Clock, Sun, Moon } from 'lucide-react';
+import { Button, Card, CardBody } from '@heroui/react';
+import { Plus, Filter, Search, Sun, Moon } from 'lucide-react';
 import { useTheme } from '@/hooks/useTheme';
 
 type Props = {
@@ -18,11 +18,10 @@ type Props = {
 export default function AdSpotList({ initialData }: Props) {
   const [placement, setPlacement] = useState<Placement | undefined>();
   const [search, setSearch] = useState('');
-  const [includeExpired, setIncludeExpired] = useState(false);
   const { theme, toggleTheme } = useTheme();
 
   const { adSpots, isLoading, isValidating, error } = useAdSpots(
-    { placement, search: search || undefined, includeExpired },
+    { placement, search: search || undefined },
     initialData
   );
 
@@ -92,9 +91,22 @@ export default function AdSpotList({ initialData }: Props) {
               <div className="h-2 w-2 bg-primary rounded-full animate-pulse shadow-lg shadow-primary/50"></div>
             </div>
           )}
-          <div className="space-y-4">
+
+          {/* Single row layout */}
+          <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 lg:items-center">
+            {/* Search - more compact */}
+            <div className="lg:w-80">
+              <div className="flex items-center gap-2 mb-3">
+                <Search className="h-4 w-4 text-primary" />
+                <h2 className="text-sm font-bold text-foreground font-(family-name:--font-display)">
+                  Buscar por título
+                </h2>
+              </div>
+              <SearchInput value={search} onChange={setSearch} />
+            </div>
+
             {/* Location Filter */}
-            <div>
+            <div className="flex-1">
               <div className="flex items-center gap-2 mb-3">
                 <Filter className="h-4 w-4 text-primary" />
                 <h2 className="text-sm font-bold text-foreground font-(family-name:--font-display)">
@@ -102,39 +114,6 @@ export default function AdSpotList({ initialData }: Props) {
                 </h2>
               </div>
               <PlacementFilter value={placement} onChange={setPlacement} />
-            </div>
-
-            {/* Search and Toggle Row */}
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-4 items-end">
-              {/* Search */}
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <Search className="h-4 w-4 text-primary" />
-                  <h2 className="text-sm font-bold text-foreground font-(family-name:--font-display)">
-                    Buscar por título
-                  </h2>
-                </div>
-                <SearchInput value={search} onChange={setSearch} />
-              </div>
-
-              {/* Include Expired Toggle */}
-              <div className="flex items-center gap-3 lg:pb-1">
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-primary" />
-                  <span className="text-sm font-semibold text-foreground whitespace-nowrap">
-                    Mostrar expirados
-                  </span>
-                </div>
-                <Switch
-                  size="sm"
-                  isSelected={includeExpired}
-                  onValueChange={setIncludeExpired}
-                  classNames={{
-                    wrapper: 'group-data-[selected=true]:bg-primary',
-                    thumb: 'bg-white'
-                  }}
-                />
-              </div>
             </div>
           </div>
         </Card>

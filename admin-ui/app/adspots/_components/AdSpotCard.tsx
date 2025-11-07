@@ -6,7 +6,19 @@ import { isAdSpotEligible, formatDateTime } from '@/lib/date-utils';
 import { useToast } from '@/hooks/useToast';
 import { useSWRConfig } from 'swr';
 import Image from 'next/image';
-import { Card, CardBody, CardFooter, Chip, Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from '@heroui/react';
+import {
+  Card,
+  CardBody,
+  CardFooter,
+  Chip,
+  Button,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from '@heroui/react';
 import { MapPin, Calendar, Clock, AlertTriangle } from 'lucide-react';
 
 type Props = {
@@ -68,12 +80,14 @@ export default function AdSpotCard({ adSpot }: Props) {
       {/* Content */}
       <CardBody className="p-6 space-y-5">
         <div>
-          <h3 className="text-xl font-bold text-foreground mb-2.5 group-hover:text-primary transition-colors duration-300 font-[family-name:var(--font-display)] leading-tight">
+          <h3 className="text-xl font-bold text-foreground mb-2.5 group-hover:text-primary transition-colors duration-300 font-(family-name:--font-display) leading-tight">
             {adSpot.title}
           </h3>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <MapPin className="h-4 w-4" />
-            <span className="font-mono text-xs uppercase tracking-wide">{adSpot.placement.replace('_', ' ')}</span>
+            <span className="font-mono text-xs uppercase tracking-wide">
+              {adSpot.placement.replace('_', ' ')}
+            </span>
           </div>
         </div>
 
@@ -82,12 +96,15 @@ export default function AdSpotCard({ adSpot }: Props) {
             <Calendar className="h-4 w-4" />
             <span>{formatDateTime(adSpot.createdAt)}</span>
           </div>
-          {adSpot.ttlMinutes && (
-            <div className="flex items-center gap-2.5 text-xs text-muted-foreground">
-              <Clock className="h-4 w-4" />
-              <span>TTL: {adSpot.ttlMinutes} minutos</span>
-            </div>
-          )}
+          <div className="flex items-center gap-2.5 text-xs text-muted-foreground">
+            <Clock className="h-4 w-4" />
+            <span>
+              TTL:{' '}
+              {adSpot.ttlMinutes
+                ? `${adSpot.ttlMinutes} minutos`
+                : 'Sin límite'}
+            </span>
+          </div>
         </div>
       </CardBody>
 
@@ -115,7 +132,7 @@ export default function AdSpotCard({ adSpot }: Props) {
           base: 'bg-card border border-border',
           header: 'border-b border-border',
           body: 'py-6',
-          footer: 'border-t border-border'
+          footer: 'border-t border-border',
         }}
       >
         <ModalContent>
@@ -130,7 +147,10 @@ export default function AdSpotCard({ adSpot }: Props) {
               <ModalBody>
                 <p className="text-muted-foreground">
                   ¿Estás seguro de que deseas desactivar el AdSpot{' '}
-                  <span className="font-semibold text-foreground">"{adSpot.title}"</span>?
+                  <span className="font-semibold text-foreground">
+                    "{adSpot.title}"
+                  </span>
+                  ?
                 </p>
                 <p className="text-sm text-muted-foreground mt-2">
                   Esta acción no se puede deshacer.
